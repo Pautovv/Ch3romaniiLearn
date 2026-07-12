@@ -1,5 +1,8 @@
 import logging
-from datasets import load_dataset
+from datasets import load_dataset, Dataset
+
+from typing import Any
+from collections.abc import Mapping
 
 from datasets.exceptions import DatasetNotFoundError
 from requests.exceptions import ConnectionError
@@ -7,7 +10,7 @@ from rag.exceptions import DatasetParsingError
 
 logger = logging.getLogger(__name__)
 
-def load_raw_data(dataset_name):
+def load_raw_data(dataset_name: str) -> Dataset:
     try:
         dataset = load_dataset(dataset_name)
     except DatasetNotFoundError as e:
@@ -28,16 +31,16 @@ def load_raw_data(dataset_name):
             f'Не удалось вернуть сплит датасета: проверте существования train-сплита.'
         ) from e
 
-def parsing_data(dataset):
-    problem = dataset['question']
-    solution = dataset['ground_truth']
+def parsing_data(raw: Mapping[str, Any]) -> dict[str, str]:
+    problem = raw['question']
+    solution = raw['ground_truth']
 
     return {
         'problem' : problem,
         'solution' : solution
     }
 
-def prepare_dataset(dataset_name):
+def prepare_dataset(dataset_name: str) -> Dataset:
     logger.info(f'Starting data preparing for {dataset_name}...')
     dataset = load_raw_data(dataset_name)
     logger.info(f'Downloaded {dataset.shape[0]:,} rows')

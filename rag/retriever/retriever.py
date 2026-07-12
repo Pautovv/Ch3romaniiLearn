@@ -8,12 +8,12 @@ from rag.exceptions import IndexNotFoundError, MetadataNotFoundError, EmptyRetri
 logger = logging.getLogger(__name__)
 
 class Retriever:
-    def __init__(self, index_path, metadata_path, model_name):
+    def __init__(self, index_path: str, metadata_path: str, model_name: str) -> None:
         self.index = self._load_index(index_path)
         self.metadata = self._load_metadata(metadata_path)
         self.model = load_model(model_name)
     
-    def _load_index(self, index_path):
+    def _load_index(self, index_path: str) -> faiss.Index:
         try:
             return faiss.read_index(index_path)
         except FileNotFoundError:
@@ -22,7 +22,7 @@ class Retriever:
                 'Путь к index не найден: запустите build_index.'
             ) from None
     
-    def _load_metadata(self, metadata_path):
+    def _load_metadata(self, metadata_path: str) -> list[str]:
         try:
             with open(metadata_path, 'r') as f:
                 return json.load(f) 
@@ -32,7 +32,7 @@ class Retriever:
                 'Путь к metadata не найдeн: запустите build_index'
             ) from None
 
-    def retrieve(self, user_query, top_k):
+    def retrieve(self, user_query: str, top_k: int) -> list[str]:
         logger.info(f'Search started | Query length: {len(user_query)} | Top_K: {top_k}')
 
         query_embedding = encode([user_query], self.model)
@@ -40,7 +40,7 @@ class Retriever:
 
         scores, ids = self.index.search(query_embedding, top_k)
     
-        documents = [self.metadata[idx] for idx in ids[0]]
+        documents = [self.metadata[idx] for idx in ids[0] if idx!=-1]
 
         if documents:
             top_score = float(scores[0][0])

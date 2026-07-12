@@ -10,7 +10,7 @@ from rag.exceptions import DatasetParsingError
 
 logger = logging.getLogger(__name__)
 
-def build_index(dataset_name, model_name, index_path, metadata_path):
+def build_index(dataset_name: str, model_name: str, index_path: str, metadata_path: str) -> None:
     logger.info('Starting index building')
     dataset = prepare_dataset(dataset_name)
 
@@ -33,7 +33,7 @@ def build_index(dataset_name, model_name, index_path, metadata_path):
 
     logger.info('Computing embeddings...')
     embeddings = encode(dataset['document'], model)
-    logger.infog(f'Embeddings computed. Shape: {embeddings.shape}')
+    logger.info(f'Embeddings computed. Shape: {embeddings.shape}')
     d = embeddings.shape[1]
 
     logger.info(f'Building FAISS-index with dimension {d}...')

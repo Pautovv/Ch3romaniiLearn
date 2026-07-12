@@ -1,4 +1,4 @@
-import logging
+import logging, numpy as np
 from sentence_transformers import SentenceTransformer
 
 from huggingface_hub.errors import RepositoryNotFoundError
@@ -7,7 +7,7 @@ from rag.exceptions import ModelLoadingError
 
 logger = logging.getLogger(__name__)
 
-def load_model(model_name):
+def load_model(model_name: str) -> SentenceTransformer:
     try:
         return  SentenceTransformer(model_name)
     except RepositoryNotFoundError as e:
@@ -21,7 +21,7 @@ def load_model(model_name):
             f'Не удалсоь скачать модель: проблемы с сетью.'
         ) from e
     
-def encode(sentences, model):
+def encode(sentences: list[str], model: SentenceTransformer) -> np.ndarray:
     embeddings = model.encode(sentences)
     
     return embeddings
