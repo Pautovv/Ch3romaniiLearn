@@ -1,6 +1,5 @@
 import logging
 from transformers import AutoTokenizer, AutoModelForCausalLM, PreTrainedTokenizerBase, PreTrainedModel
-from app.generation.prompt_builder import build_prompt
 
 from huggingface_hub.errors import RepositoryNotFoundError
 from requests.exceptions import ConnectionError
@@ -46,7 +45,7 @@ class Generator:
             ) from e
 
 
-    def generate(self, messages: list[dict[str, str]], max_new_tokens: int = 512, temperature: float = 0.7) -> str:
+    def generate(self, messages: list[dict[str, str]], max_new_tokens: int, temperature: float) -> str:
         logger.info('Generating response...')
         inputs = self.tokenizer.apply_chat_template(
 	        messages,
