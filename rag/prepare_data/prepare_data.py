@@ -1,4 +1,7 @@
+import logging
 from datasets import load_dataset
+
+logger = logging.getLogger(__name__)
 
 def load_raw_data(dataset_name):
     dataset = load_dataset(dataset_name)
@@ -15,11 +18,15 @@ def parsing_data(dataset):
     }
 
 def prepare_dataset(dataset_name):
+    logger.info(f'Starting data preparing for {dataset_name}...')
     dataset = load_raw_data(dataset_name)
+    logger.info(f'Downloaded {dataset.shape[0]:,} rows')
 
     dataset = dataset.map(parsing_data)
+    logger.info('Applied parsing data')
 
     dataset = dataset.select_columns(['problem', 'solution'])
+    logger.info(f'Prepared {dataset.shape[0]:,} rows and {list(dataset.features.keys())} cols')
 
     return dataset
 
