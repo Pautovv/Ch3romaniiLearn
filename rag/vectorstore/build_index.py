@@ -14,7 +14,7 @@ def build_index(dataset_name, model_name, index_path, metadata_path):
     logger.info('Starting index building')
     dataset = prepare_dataset(dataset_name)
 
-    logger.info(f'Loading model: {model}...')
+    logger.info(f'Loading model: {model_name}...')
     model = load_model(model_name)
     logger.info(f'Model loaded successfully')
 

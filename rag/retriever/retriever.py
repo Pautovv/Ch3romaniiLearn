@@ -32,7 +32,7 @@ class Retriever:
                 'Путь к metadata не найдeн: запустите build_index'
             ) from None
 
-    def retriever(self, user_query, top_k):
+    def retrieve(self, user_query, top_k):
         logger.info(f'Search started | Query length: {len(user_query)} | Top_K: {top_k}')
 
         query_embedding = encode([user_query], self.model)
