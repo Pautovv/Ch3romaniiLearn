@@ -6,6 +6,8 @@ from rag.vectorstore.faiss_store import FaissStore
 from rag.config import MODEL_NAME, DATASET_NAME, INDEX_PATH, METADATA_PATH
 from logger_config import setup_logging
 
+from rag.exceptions import DatasetParsingError
+
 logger = logging.getLogger(__name__)
 
 def build_index(dataset_name, model_name, index_path, metadata_path):
@@ -20,7 +22,14 @@ def build_index(dataset_name, model_name, index_path, metadata_path):
     dataset = dataset.map(
         lambda raw: {'document' : f"{raw['problem']}\n\n{raw['solution']}"}
     )
-    logger.info(f'Created {len(dataset)} documents')
+    if len(dataset)==0:
+        logger.error('Dataset became empty after combined documents')
+        raise DatasetParsingError(
+            'Датасет пустой: проверить функцию создания документов.'
+        )
+    else:
+        logger.info(f'Created {len(dataset)} documents')
+
 
     logger.info('Computing embeddings...')
     embeddings = encode(dataset['document'], model)
