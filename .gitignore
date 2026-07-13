@@ -1,3 +1,5 @@
 /.venv/
 /.env
 __pycache__/
+/models/qwen2.5-exam-tutor/hf_model/
+/models/qwen2.5-exam-tutor/model-f16.gguf

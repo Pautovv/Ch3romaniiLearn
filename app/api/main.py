@@ -7,15 +7,17 @@ from contextlib import asynccontextmanager
 from app.api.schemas import UserRequest, ModelResponse
 
 from rag.retriever.retriever import Retriever
+
 from app.generation.inference import Generator
+from app.generation.inference_ollama import OllamaGenerator
+
 from app.pipeline import generate_answer
 
 from rag.config import INDEX_PATH, METADATA_PATH, MODEL_NAME as EMBEDDING_MODEL
-from app.config import MODEL_NAME 
+from app.config import MODEL_NAME, GENERATION_BACKEND, OLLAMA_MODEL
 
 from rag.exceptions import EmptyRetrieverError
 from app.exceptions import EmptyGeneratorError
-
 
 logger = logging.getLogger(__name__)
 
@@ -24,7 +26,10 @@ async def lifespan(app: FastAPI):
     setup_logging()
     logger.info('Server started')
     app.state.retriever = Retriever(INDEX_PATH, METADATA_PATH, EMBEDDING_MODEL)
-    app.state.generator = Generator(MODEL_NAME)
+    if GENERATION_BACKEND=='ollama':
+         app.state.generator = OllamaGenerator(OLLAMA_MODEL)
+    else:
+        app.state.generator = Generator(MODEL_NAME)
     yield
     logger.info('Server ended')
 
