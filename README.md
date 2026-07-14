@@ -16,7 +16,7 @@
 
 | **Training Loss** | **Eval Loss** |
 |:---:|:---:|
-| <img src="./dev/training-loss.svg" width="100%"> | <img src="./dev/eval-loss.svg" width="100%"> |
+| <img src="./assets/training-loss.svg" width="100%"> | <img src="./assets/eval-loss.svg" width="100%"> |
 
 В процессе SFT произошло overfiting на 4 эпохи, что подвтерждается графиками изменения loss-функции на обучающей и валидационной выборках. Было решено сохранением лучшего чекпоинта модели.<br>
 **Подробно про данный этап написано в ноутбуке.**
